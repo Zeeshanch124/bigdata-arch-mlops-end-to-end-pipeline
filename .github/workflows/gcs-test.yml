@@ -1,0 +1,25 @@
+name: GCS Test Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-gcs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload test file to GCS
+        run: |
+          echo "hello gcs" > test.txt
+          gsutil cp test.txt gs://bigdata-mlop-bucket/test/
