@@ -152,7 +152,13 @@ def main():
             f'Model uploaded to gs://{BUCKET_NAME}/{model_blob_path}'
         )
 
-        update_model_metadata(version)
+        update_model_metadata(
+    gcs_handler=gcs_handler,
+    version=version,
+    model_path=MODEL_OUTPUT_PATH,
+    trained_on=[PROCESSED_DATA_PATH],
+    deployment_status='staging'
+)
     logging.info('Training pipeline completed successfully.')
 
 
