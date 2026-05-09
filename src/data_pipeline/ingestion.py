@@ -46,7 +46,7 @@ def main():
 
     X_processed, y = preprocessor.preprocess(df)
 
-    processed_df = pd.DataFrame(X_processed.toarray())
+    processed_df = pd.DataFrame(X_processed)
 
     processed_df['Default'] = y.values
 
