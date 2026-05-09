@@ -1,6 +1,7 @@
 from google.cloud import storage
 import pandas as pd
 from io import StringIO
+import json
 
 
 
@@ -20,5 +21,21 @@ class GCSHandler:
             dataframe.to_csv(index=False),
             content_type='text/csv'
         )
+    
+    def download_json(self, blob_name: str):
 
-        print(f"Uploaded file to gs://{self.bucket.name}/{blob_name}")
+        blob = self.bucket.blob(blob_name)
+        data = blob.download_as_text()
+        return json.loads(data)
+
+
+    def upload_json(self, data: dict, blob_name: str):
+
+        blob = self.bucket.blob(blob_name)
+        blob.upload_from_string(
+            json.dumps(data, indent=4),
+            content_type='application/json'
+        )
+        print(
+            f'Uploaded JSON to gs://{self.bucket.name}/{blob_name}'
+        )

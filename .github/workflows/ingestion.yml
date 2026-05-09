@@ -1,19 +1,12 @@
-name: CI Pipeline
+name: Data Ingestion Pipeline
 
 on:
   push:
     branches:
       - develop
-      - main
-      - feature/**
-
-  pull_request:
-    branches:
-      - develop
-      - main
 
 jobs:
-  test-and-validate:
+  ingestion:
 
     runs-on: ubuntu-latest
 
@@ -34,6 +27,14 @@ jobs:
         run: |
           pip install -e .
 
-      - name: Run Unit Tests
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Run Data Pipeline
         run: |
-          pytest
+          python src/data_pipeline/ingestion.py
