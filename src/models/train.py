@@ -25,9 +25,7 @@ from utils import (
 
 
 
-MODEL_OUTPUT_PATH = (
-    f'models/loan_default_xgboost_v{version}.pkl'
-)
+
 
 
 logging.basicConfig(
@@ -63,6 +61,9 @@ def main():
     gcs_handler = GCSHandler(BUCKET_NAME)
     version = get_next_model_version(gcs_handler)
     print("New version of Model: ",version)
+    MODEL_OUTPUT_PATH = (
+    f'models/loan_default_xgboost_v{version}.pkl'
+)
 
     logging.info('Downloading processed dataset from GCS...')
 

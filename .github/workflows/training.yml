@@ -3,7 +3,7 @@ name: Model Training Pipeline
 on:
   push:
     branches:
-      - develop
+      - feature/training-pipeline
 
 jobs:
   training:
