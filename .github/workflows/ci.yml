@@ -38,4 +38,4 @@ jobs:
           pytest
       - name: Run Data Pipeline
         run: |
-          python data_pipeline/ingestion.py
+          python src/data_pipeline/ingestion.py
