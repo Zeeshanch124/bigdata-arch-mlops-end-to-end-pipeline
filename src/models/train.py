@@ -13,7 +13,7 @@ from sklearn.metrics import (
     recall_score,
     f1_score
 )
-
+from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
 
 from data_pipeline.gcs_handler import GCSHandler
@@ -100,11 +100,16 @@ def main():
 
         logging.info('Training XGBoost model...')
 
-        model.fit(X_train, y_train)
+        pipeline = Pipeline([
+            ('preprocessor', preprocessor.preprocessor),
+            ('model', model)
+        ])
+
+        pipeline.fit(X_train, y_train)
 
         logging.info('Generating predictions...')
 
-        y_pred = model.predict(X_test)
+        y_pred = pipeline.predict(X_test)
 
         metrics = evaluate_model(y_test, y_pred)
 
@@ -131,12 +136,12 @@ def main():
 
         local_model_path = 'artifacts/model_v1.pkl'
 
-        joblib.dump(model, local_model_path)
+        joblib.dump(pipeline, local_model_path)
 
         logging.info('Logging model artifact to MLflow...')
 
         mlflow.sklearn.log_model(
-            sk_model=model,
+            sk_model=pipeline,
             artifact_path='model'
         )
 
