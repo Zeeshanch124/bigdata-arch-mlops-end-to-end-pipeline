@@ -14,6 +14,7 @@ from sklearn.metrics import (
     f1_score
 )
 from sklearn.pipeline import Pipeline
+from data_pipeline.preprocessing import DataPreprocessor
 from xgboost import XGBClassifier
 
 from data_pipeline.gcs_handler import GCSHandler
@@ -58,6 +59,7 @@ def main():
 
     logging.info('Starting model training pipeline...')
 
+    preprocessor = DataPreprocessor()
     gcs_handler = GCSHandler(BUCKET_NAME)
     version = get_next_model_version(gcs_handler)
     print("New version of Model: ",version)
