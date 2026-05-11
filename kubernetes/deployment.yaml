@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: loan-default-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: loan-default-api
+
+  template:
+    metadata:
+      labels:
+        app: loan-default-api
+
+    spec:
+      containers:
+        - name: loan-default-api
+
+          image: loan-default-api:latest
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 5000
+
+          env:
+            - name: BUCKET_NAME
+              value: "bigdata-mlop-bucket"
