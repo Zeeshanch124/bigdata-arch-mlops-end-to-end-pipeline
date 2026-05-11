@@ -4,6 +4,7 @@ import logging
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 
+
 from api.predictor import ModelPredictor
 
 

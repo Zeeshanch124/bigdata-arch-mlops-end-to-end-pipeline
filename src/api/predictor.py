@@ -1,6 +1,7 @@
 import joblib
 import tempfile
 import logging
+import pandas as pd
 
 from data_pipeline.gcs_handler import GCSHandler
 
@@ -44,9 +45,11 @@ class ModelPredictor:
 
     def predict(self, features):
 
-        prediction = self.model.predict([features])
+        df = pd.DataFrame([features])
 
-        probability = self.model.predict_proba([features])
+        prediction = self.model.predict(df)
+
+        probability = self.model.predict_proba(df)
 
         return {
             'prediction': int(prediction[0]),
