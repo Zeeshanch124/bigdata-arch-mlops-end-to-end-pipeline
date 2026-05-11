@@ -69,7 +69,7 @@ def main():
 
     logging.info('Downloading processed dataset from GCS...')
 
-    df = gcs_handler.load_csv(RAW_DATA_PATH)
+    df = gcs_handler.download_csv(RAW_DATA_PATH)
 
     logging.info(f'Processed dataset shape: {df.shape}')
 
