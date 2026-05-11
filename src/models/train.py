@@ -163,7 +163,7 @@ def main():
     gcs_handler=gcs_handler,
     version=version,
     model_path=MODEL_OUTPUT_PATH,
-ined_on=[RAW_DATA_PATH],
+    trained_on=[RAW_DATA_PATH],
     deployment_status='staging'
 )
     logging.info('Training pipeline completed successfully.')
