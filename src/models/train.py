@@ -37,9 +37,9 @@ logging.basicConfig(
 load_dotenv()
 
 BUCKET_NAME = os.getenv('GCP_BUCKET_NAME')
-PROCESSED_DATA_PATH = os.getenv(
-    'PROCESSED_DATA_PATH',
-    'processed/processed_loan_default.csv'
+RAW_DATA_PATH = os.getenv(
+    'RAW_DATA_PATH',
+    'raw/Loan_default.csv'
 )
 
 
@@ -69,7 +69,7 @@ def main():
 
     logging.info('Downloading processed dataset from GCS...')
 
-    df = gcs_handler.download_csv(PROCESSED_DATA_PATH)
+    df = gcs_handler.load_csv(RAW_DATA_PATH)
 
     logging.info(f'Processed dataset shape: {df.shape}')
 
@@ -163,7 +163,7 @@ def main():
     gcs_handler=gcs_handler,
     version=version,
     model_path=MODEL_OUTPUT_PATH,
-    trained_on=[PROCESSED_DATA_PATH],
+ined_on=[RAW_DATA_PATH],
     deployment_status='staging'
 )
     logging.info('Training pipeline completed successfully.')
