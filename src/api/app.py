@@ -36,9 +36,7 @@ def predict():
 
         data = request.json
 
-        features = data['features']
-
-        prediction = predictor.predict(features)
+        prediction = predictor.predict(data)
 
         return jsonify(prediction)
 
