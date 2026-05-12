@@ -2,8 +2,8 @@ name: Model Training Pipeline
 
 on:
   push:
-    branches:
-      - feature/training-pipeline
+    # branches:
+    #   - feature/training-pipeline
 
 jobs:
   training:
