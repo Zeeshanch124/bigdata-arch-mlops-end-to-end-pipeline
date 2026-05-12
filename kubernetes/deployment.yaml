@@ -17,6 +17,9 @@ spec:
         app: loan-default-api
 
     spec:
+      imagePullSecrets:
+        - name: artifact-registry-secret
+
       containers:
         - name: loan-default-api
 
