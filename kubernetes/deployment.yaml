@@ -28,5 +28,5 @@ spec:
             - containerPort: 5000
 
           env:
-            - name: BUCKET_NAME
+            - name: GCP_BUCKET_NAME
               value: "bigdata-mlop-bucket"
