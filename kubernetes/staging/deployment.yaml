@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: loan-default-api
+  namespace: staging
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: loan-default-api
+
+  template:
+    metadata:
+      labels:
+        app: loan-default-api
+
+    spec:
+      imagePullSecrets:
+        - name: artifact-registry-secret
+
+      containers:
+        - name: loan-default-api
+
+          image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:1e471e1470b5b5a4328ac083b052da8f8876fc0d
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 5000
+
+          env:
+            - name: GCP_BUCKET_NAME
+              value: "bigdata-mlop-bucket"

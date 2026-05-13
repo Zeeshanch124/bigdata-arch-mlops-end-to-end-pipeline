@@ -27,6 +27,23 @@ class ModelPredictor:
             METADATA_PATH
         )
 
+        self.metadata = metadata
+
+        self.model_version = metadata.get(
+            'current_version',
+            'unknown'
+        )
+
+        self.model_name = metadata.get(
+            'model_name',
+            'unknown'
+        )
+
+        self.deployment_status = metadata.get(
+            'deployment_status',
+            'unknown'
+        )
+
         model_path = metadata['model_path']
 
         logging.info(

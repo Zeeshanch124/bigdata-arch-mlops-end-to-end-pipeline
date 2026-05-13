@@ -9,3 +9,4 @@ pytest
 joblib
 flask
 gunicorn
+google-cloud-bigquery

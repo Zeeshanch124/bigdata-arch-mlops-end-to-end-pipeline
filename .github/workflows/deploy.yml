@@ -2,11 +2,12 @@ name: CI-CD-Pipeline
 
 on:
   workflow_call:
-  
+
 permissions:
   contents: write
 
 jobs:
+  if: github.ref == 'refs/heads/main'
   docker-build-push:
     runs-on: ubuntu-latest
 
