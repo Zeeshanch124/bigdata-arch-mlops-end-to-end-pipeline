@@ -35,7 +35,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mlops-repo/loan-default-api:${{ github.sha }} .
+          docker build -t europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }} .
 
       - name: Test Docker Push Auth
         run: |
@@ -43,4 +43,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mlops-repo/loan-default-api:${{ github.sha }}
+          docker push europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }}
