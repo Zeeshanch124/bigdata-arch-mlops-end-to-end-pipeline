@@ -1,0 +1,37 @@
+name: "Setup Environment"
+
+description: "Setup Python, dependencies, and GCP authentication"
+
+inputs:
+  gcp_sa_key:
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        pip install -r requirements.txt
+
+    - name: Install Project
+      shell: bash
+      run: |
+        pip install -e .
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ inputs.gcp_sa_key }}
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
