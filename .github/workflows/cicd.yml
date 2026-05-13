@@ -21,6 +21,10 @@ jobs:
       - name: Setup GCloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Verify GCP Account
+        run: |
+          gcloud auth list
+
       - name: Configure Docker
         run: |
           gcloud auth configure-docker europe-west1-docker.pkg.dev
