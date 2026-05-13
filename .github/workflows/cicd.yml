@@ -42,3 +42,18 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }}
+
+      - name: Update Kubernetes Manifest
+        run: |
+          sed -i "s|image: .*|image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }}|g" kubernetes/deployment.yaml
+
+      - name: Commit Updated Manifest
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+
+          git add kubernetes/deployment.yaml
+
+          git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes"
+
+          git push origin feature/training-pipeline
