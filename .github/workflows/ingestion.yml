@@ -1,9 +1,7 @@
 name: Data Ingestion Pipeline
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_call:
 
 jobs:
   ingestion:

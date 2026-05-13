@@ -9,7 +9,7 @@ spec:
 
   source:
     repoURL: https://github.com/Zeeshanch124/bigdata-arch-mlops-end-to-end-pipeline
-    targetRevision: feature/training-pipeline
+    targetRevision: main
     path: kubernetes
 
   destination:
