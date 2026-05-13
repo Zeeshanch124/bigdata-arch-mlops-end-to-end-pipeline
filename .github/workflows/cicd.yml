@@ -18,16 +18,12 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Setup GCloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Verify GCP Account
-        run: |
-          gcloud auth list
-
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker europe-west1-docker.pkg.dev
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: europe-west1-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
 
       - name: Build Docker Image
         run: |
