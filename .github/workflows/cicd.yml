@@ -49,8 +49,8 @@ jobs:
 
       - name: Commit Updated Manifest
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
+          git config --global user.email "zeeshanch124@gmail.com"
+          git config --global user.name "zeeshanch124"
 
           git add kubernetes/deployment.yaml
 
