@@ -2,11 +2,7 @@ name: CI Pipeline
 
 on:
   workflow_call:
-      
-  pull_request:
-    branches:
-      - main
-
+ 
 jobs:
   test-and-validate:
 

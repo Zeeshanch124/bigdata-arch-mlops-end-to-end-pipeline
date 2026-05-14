@@ -12,23 +12,71 @@ permissions:
 
 jobs:
 
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      monitoring: ${{ steps.filter.outputs.monitoring }}
+      training: ${{ steps.filter.outputs.training }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect Changes
+        uses: dorny/paths-filter@v3
+        id: filter
+
+        with:
+          filters: |
+
+            monitoring:
+              - 'api/**'
+              - 'src/monitoring/**'
+              - 'Dockerfile'
+              - 'kubernetes/**'
+
+            training:
+              - 'src/models/**'
+              - 'src/data_pipeline/**'
+              - 'training/**'
+              - 'data/**'
+
   ci:
+    needs: changes
     uses: ./.github/workflows/ci.yml
 
   ingestion:
-    needs: ci
+    needs: [changes, ci]
+
+    if: needs.changes.outputs.training == 'true'
+
     uses: ./.github/workflows/ingestion.yml
+
     secrets: inherit
 
   training:
-    needs: ingestion
+    needs: [changes, ingestion]
+
+    if: needs.changes.outputs.training == 'true'
+
     uses: ./.github/workflows/training.yml
+
     secrets: inherit
 
   deploy-staging:
-    if: github.ref == 'refs/heads/develop'
+    if: |
+      github.ref == 'refs/heads/develop' &&
+      (
+        needs.changes.outputs.monitoring == 'true' ||
+        needs.changes.outputs.training == 'true'
+      )
 
-    needs: training
+    needs:
+      - changes
+      - ci
+      - ingestion
+      - training
 
     uses: ./.github/workflows/deploy.yml
 
@@ -39,9 +87,18 @@ jobs:
     secrets: inherit
 
   deploy-production:
-    if: github.ref == 'refs/heads/main'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      (
+        needs.changes.outputs.monitoring == 'true' ||
+        needs.changes.outputs.training == 'true'
+      )
 
-    needs: training
+    needs:
+      - changes
+      - ci
+      - ingestion
+      - training
 
     uses: ./.github/workflows/deploy.yml
 
