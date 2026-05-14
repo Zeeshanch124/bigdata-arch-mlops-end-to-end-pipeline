@@ -2,6 +2,14 @@ name: CI-CD-Pipeline
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+      manifest_path:
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -46,15 +54,15 @@ jobs:
 
       - name: Update Kubernetes Manifest
         run: |
-          sed -i "s|image: .*|image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }}|g" kubernetes/deployment.yaml
+          sed -i "s|image: .*|image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:${{ github.sha }}|g" ${{ inputs.manifest_path }}
 
       - name: Commit Updated Manifest
         run: |
           git config --global user.email "zeeshanch124@gmail.com"
           git config --global user.name "zeeshanch124"
 
-          git add kubernetes/deployment.yaml
+          git add ${{ inputs.manifest_path }}
 
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes"
 
-          git push origin main
+          git push origin ${{ github.ref_name }}
