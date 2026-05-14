@@ -4,6 +4,7 @@ import joblib
 import mlflow
 import mlflow.sklearn
 import pandas as pd
+import numpy as np
 
 from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
