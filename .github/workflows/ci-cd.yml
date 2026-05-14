@@ -83,7 +83,6 @@ jobs:
 
   deploy-staging-model:
     if: |
-      if: |
       github.ref == 'refs/heads/develop' &&
       needs.changes.outputs.training == 'true'
 
