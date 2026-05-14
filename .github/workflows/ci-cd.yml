@@ -64,17 +64,34 @@ jobs:
 
     secrets: inherit
 
-  deploy-staging:
+  deploy-staging-api:
     if: |
       github.ref == 'refs/heads/develop' &&
-      (
-        needs.changes.outputs.monitoring == 'true' ||
-        needs.changes.outputs.training == 'true'
-      )
+      needs.changes.outputs.monitoring == 'true'
 
     needs:
       - changes
       - ci
+
+    uses: ./.github/workflows/deploy.yml
+
+    with:
+      environment: staging
+      manifest_path: kubernetes/staging/deployment.yaml
+
+    secrets: inherit
+
+  deploy-staging-model:
+    if: |
+      if: |
+      github.ref == 'refs/heads/develop' &&
+      needs.changes.outputs.training == 'true'
+
+    needs:
+      - changes
+      - ci
+      - ingestion
+      - training
        
 
     uses: ./.github/workflows/deploy.yml
@@ -85,17 +102,34 @@ jobs:
 
     secrets: inherit
 
-  deploy-production:
+  deploy-production-api:
     if: |
       github.ref == 'refs/heads/main' &&
-      (
-        needs.changes.outputs.monitoring == 'true' ||
-        needs.changes.outputs.training == 'true'
-      )
+      needs.changes.outputs.monitoring == 'true'
 
     needs:
       - changes
       - ci
+
+    uses: ./.github/workflows/deploy.yml
+
+    with:
+      environment: staging
+      manifest_path: kubernetes/production/deployment.yaml
+
+    secrets: inherit
+
+  deploy-production:
+    if: |
+      if: |
+      github.ref == 'refs/heads/main' &&
+      needs.changes.outputs.training == 'true'
+
+    needs:
+      - changes
+      - ci
+      - ingestion
+      - training
 
     uses: ./.github/workflows/deploy.yml
 
