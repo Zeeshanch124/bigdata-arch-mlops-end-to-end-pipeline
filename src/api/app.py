@@ -3,6 +3,8 @@ import logging
 
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from src.monitoring.prediction_logger import PredictionLogger
+prediction_logger = PredictionLogger()
 
 
 from api.predictor import ModelPredictor
@@ -38,6 +40,13 @@ def predict():
         data = request.json
 
         prediction = predictor.predict(data)
+
+        prediction_logger.log_prediction(
+            features=data,
+            prediction=prediction['prediction'],
+            confidence=prediction['default_probability'],
+            model_version=predictor.model_version
+        )
 
         return jsonify(prediction)
 

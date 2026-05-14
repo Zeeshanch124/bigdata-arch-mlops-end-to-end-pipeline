@@ -1,7 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
+
 metadata:
-  name: loan-default-api
+  name: loan-default-staging
   namespace: argocd
 
 spec:
@@ -9,12 +10,12 @@ spec:
 
   source:
     repoURL: https://github.com/Zeeshanch124/bigdata-arch-mlops-end-to-end-pipeline
-    targetRevision: main
-    path: kubernetes
+    targetRevision: develop
+    path: kubernetes/staging
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: staging
 
   syncPolicy:
     automated:
