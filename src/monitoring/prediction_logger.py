@@ -30,7 +30,7 @@ class PredictionLogger:
             "prediction": int(prediction),
             "confidence": float(confidence),
         }
-        logging.info(f"Row payload: {row}")
+        logging.info(f"Row payload is: {row}")
         # row.update(features)
         row["features"] = json.dumps(features)
 
