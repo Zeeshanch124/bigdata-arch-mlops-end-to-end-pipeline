@@ -2,9 +2,7 @@ name: Monitoring Pipeline
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
-
-  workflow_dispatch:
+    - cron: '*/10 * * * *'
 
 jobs:
 
