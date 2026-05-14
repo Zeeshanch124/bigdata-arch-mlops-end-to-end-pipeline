@@ -22,14 +22,14 @@ class PredictionLogger:
         model_version
     ):
 
-        logging.info(f"Row payload: {row}")
+        
         row = {
             "timestamp": datetime.utcnow().isoformat(),
             "model_version": int(model_version),
             "prediction": int(prediction),
             "confidence": float(confidence),
         }
-
+        logging.info(f"Row payload: {row}")
         row.update(features)
 
         errors = self.client.insert_rows_json(

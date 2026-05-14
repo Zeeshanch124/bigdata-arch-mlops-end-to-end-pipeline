@@ -1,6 +1,13 @@
 name: CI-CD-Pipeline
 
 on:
+  push:
+      paths:
+      - 'api/**'
+      - 'src/monitoring/**'
+      - 'Dockerfile'
+      - 'kubernetes/**'
+      
   workflow_call:
     inputs:
       environment:

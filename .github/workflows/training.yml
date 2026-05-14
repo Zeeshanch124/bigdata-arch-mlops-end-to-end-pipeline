@@ -1,6 +1,10 @@
 name: Model Training Pipeline
 
 on:
+  push:
+    paths:
+      - 'src/models/**'
+      - 'src/data_pipeline/**'
   workflow_call:
   
 jobs:
