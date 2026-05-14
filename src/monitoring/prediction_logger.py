@@ -1,5 +1,7 @@
+from xml.parsers.expat import errors
 from google.cloud import bigquery
 from datetime import datetime
+import logging
 
 
 class PredictionLogger:
@@ -20,6 +22,7 @@ class PredictionLogger:
         model_version
     ):
 
+        logging.info(f"Row payload: {row}")
         row = {
             "timestamp": datetime.utcnow().isoformat(),
             "model_version": int(model_version),
@@ -35,6 +38,6 @@ class PredictionLogger:
         )
 
         if errors:
-            print("BigQuery Insert Errors:", errors)
+            logging.error(f"BigQuery Insert Errors: {errors}")
         else:
-            print("Prediction logged successfully")
+            logging.info("Prediction logged successfully")
