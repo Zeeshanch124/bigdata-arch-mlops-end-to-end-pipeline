@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loan-default-api
+  name: loan-default-production
   namespace: argocd
 
 spec:
