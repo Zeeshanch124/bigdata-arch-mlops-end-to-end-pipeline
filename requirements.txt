@@ -10,3 +10,4 @@ joblib
 flask
 gunicorn
 google-cloud-bigquery
+db-dtypes
