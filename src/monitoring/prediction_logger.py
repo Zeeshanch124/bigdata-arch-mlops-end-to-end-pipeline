@@ -1,3 +1,4 @@
+import json
 from xml.parsers.expat import errors
 from google.cloud import bigquery
 from datetime import datetime
@@ -30,7 +31,8 @@ class PredictionLogger:
             "confidence": float(confidence),
         }
         logging.info(f"Row payload: {row}")
-        row.update(features)
+        # row.update(features)
+        row["features"] = json.dumps(features)
 
         errors = self.client.insert_rows_json(
             self.table_id,
