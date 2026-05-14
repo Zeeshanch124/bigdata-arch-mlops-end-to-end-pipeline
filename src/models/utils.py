@@ -47,7 +47,8 @@ def update_model_metadata(
     version: int,
     model_path: str,
     trained_on: list,
-    deployment_status: str = 'staging'
+    deployment_status: str = 'staging',
+    training_metrics: dict = None
 ):
 
     metadata = {
@@ -55,7 +56,8 @@ def update_model_metadata(
         'model_name': 'loan_default_xgboost',
         'model_path': model_path,
         'deployment_status': deployment_status,
-        'trained_on': trained_on
+        'trained_on': trained_on,
+        'training_metrics': training_metrics or {}
     }
 
     gcs_handler.upload_json(

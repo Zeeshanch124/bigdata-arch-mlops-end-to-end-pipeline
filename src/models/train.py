@@ -110,12 +110,32 @@ def main():
         pipeline.fit(X_train, y_train)
 
         logging.info('Generating predictions...')
-
         y_pred = pipeline.predict(X_test)
 
         metrics = evaluate_model(y_test, y_pred)
+        y_prob = pipeline.predict_proba(X_test)
 
-        logging.info(f'Model Metrics: {metrics}')
+        avg_confidence = float(
+                np.max(y_prob, axis=1).mean()
+            )
+
+        default_rate = float(
+                (y_pred == 1).mean()
+            )
+
+        baseline_metrics = {
+            "model_version": version,
+            "accuracy": metrics["accuracy"],
+            "precision": metrics["precision"],
+            "recall": metrics["recall"],
+            "f1_score": metrics["f1_score"],
+            "avg_confidence": avg_confidence,
+            "default_rate": default_rate
+        }
+
+        logging.info(
+            f'Baseline Metrics: {baseline_metrics}'
+        )
 
         logging.info('Logging parameters to MLflow...')
 
@@ -160,12 +180,13 @@ def main():
         )
 
         update_model_metadata(
-    gcs_handler=gcs_handler,
-    version=version,
-    model_path=MODEL_OUTPUT_PATH,
-    trained_on=[RAW_DATA_PATH],
-    deployment_status='staging'
-)
+            gcs_handler=gcs_handler,
+            version=version,
+            model_path=MODEL_OUTPUT_PATH,
+            trained_on=[RAW_DATA_PATH],
+            deployment_status='staging',
+            training_metrics=baseline_metrics
+        )
     logging.info('Training pipeline completed successfully.')
 
 
