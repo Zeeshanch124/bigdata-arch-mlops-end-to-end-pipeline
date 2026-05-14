@@ -25,7 +25,28 @@ jobs:
     uses: ./.github/workflows/training.yml
     secrets: inherit
 
-  deploy:
+  deploy-staging:
+    if: github.ref == 'refs/heads/develop'
+
     needs: training
+
     uses: ./.github/workflows/deploy.yml
+
+    with:
+      environment: staging
+      manifest_path: kubernetes/staging/deployment.yaml
+
+    secrets: inherit
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+
+    needs: training
+
+    uses: ./.github/workflows/deploy.yml
+
+    with:
+      environment: production
+      manifest_path: kubernetes/production/deployment.yaml
+
     secrets: inherit
