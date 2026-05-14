@@ -75,8 +75,7 @@ jobs:
     needs:
       - changes
       - ci
-      - ingestion
-      - training
+       
 
     uses: ./.github/workflows/deploy.yml
 
@@ -97,8 +96,6 @@ jobs:
     needs:
       - changes
       - ci
-      - ingestion
-      - training
 
     uses: ./.github/workflows/deploy.yml
 
