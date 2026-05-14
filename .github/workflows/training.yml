@@ -1,7 +1,6 @@
 name: Model Training Pipeline
 
 on:
-  push:
   workflow_call:
   
 jobs:

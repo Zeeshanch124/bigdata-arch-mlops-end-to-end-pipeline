@@ -1,8 +1,8 @@
 name: CI-CD-Pipeline
 
 on:
-  push:
   workflow_call:
+
     inputs:
       environment:
         required: true

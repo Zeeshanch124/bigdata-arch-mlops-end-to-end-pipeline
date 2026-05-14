@@ -1,7 +1,6 @@
 name: Data Ingestion Pipeline
 
 on:
-  push:
   workflow_call:
 
 jobs:
