@@ -1,10 +1,11 @@
- 
 import os
+import json
 import logging
-from datetime import datetime, timedelta
 
 import pandas as pd
+
 from google.cloud import bigquery
+from data_pipeline.gcs_handler import GCSHandler
 
 
 logging.basicConfig(
@@ -17,6 +18,8 @@ PROJECT_ID = "valid-design-385517"
 DATASET = "mlops_monitoring"
 TABLE = "predictions"
 
+METADATA_PATH = "metadata/current_model.json"
+
 
 class DriftMonitor:
 
@@ -26,14 +29,46 @@ class DriftMonitor:
             project=PROJECT_ID
         )
 
+        self.bucket_name = os.getenv(
+            'GCP_BUCKET_NAME'
+        )
+
+        self.gcs_handler = GCSHandler(
+            self.bucket_name
+        )
+
         self.table_id = (
             f"{PROJECT_ID}.{DATASET}.{TABLE}"
         )
 
+        self.metadata = (
+            self.load_model_metadata()
+        )
+
+    def load_model_metadata(self):
+
+        logging.info(
+            'Loading model metadata...'
+        )
+
+        metadata = (
+            self.gcs_handler.download_json(
+                METADATA_PATH
+            )
+        )
+
+        logging.info(
+            f"Loaded metadata for "
+            f"model version: "
+            f"{metadata['current_version']}"
+        )
+
+        return metadata
+
     def fetch_recent_predictions(
         self,
         hours=24
-    ):
+    ) -> pd.DataFrame:
 
         query = f"""
         SELECT
@@ -50,7 +85,8 @@ class DriftMonitor:
         """
 
         logging.info(
-            'Fetching recent predictions from BigQuery...'
+            'Fetching recent predictions '
+            'from BigQuery...'
         )
 
         df = self.client.query(
@@ -76,23 +112,40 @@ class DriftMonitor:
 
             return
 
-        distribution = (
-            df['prediction']
-            .value_counts(normalize=True)
-            .to_dict()
+        production_default_rate = float(
+            (df['prediction'] == 1).mean()
+        )
+
+        training_default_rate = (
+            self.metadata['training_metrics']
+            ['default_rate']
         )
 
         logging.info(
-            f'Prediction Distribution: {distribution}'
+            f'Production Default Rate: '
+            f'{production_default_rate:.4f}'
         )
 
-        default_rate = distribution.get(1, 0)
+        logging.info(
+            f'Training Default Rate: '
+            f'{training_default_rate:.4f}'
+        )
 
-        if default_rate > 0.80:
+        drift = abs(
+            production_default_rate -
+            training_default_rate
+        )
+
+        logging.info(
+            f'Default Rate Drift: '
+            f'{drift:.4f}'
+        )
+
+        if drift > 0.20:
 
             logging.warning(
-                'Potential drift detected: '
-                'Very high default prediction rate.'
+                'Potential prediction drift '
+                'detected.'
             )
 
     def monitor_confidence(
@@ -104,20 +157,40 @@ class DriftMonitor:
 
             return
 
-        avg_confidence = (
+        production_confidence = float(
             df['confidence'].mean()
         )
 
-        logging.info(
-            f'Average Confidence: '
-            f'{avg_confidence:.4f}'
+        training_confidence = (
+            self.metadata['training_metrics']
+            ['avg_confidence']
         )
 
-        if avg_confidence < 0.60:
+        logging.info(
+            f'Production Confidence: '
+            f'{production_confidence:.4f}'
+        )
+
+        logging.info(
+            f'Training Confidence: '
+            f'{training_confidence:.4f}'
+        )
+
+        confidence_ratio = (
+            production_confidence /
+            training_confidence
+        )
+
+        logging.info(
+            f'Confidence Ratio: '
+            f'{confidence_ratio:.4f}'
+        )
+
+        if confidence_ratio < 0.70:
 
             logging.warning(
-                'Potential model degradation: '
-                'Confidence score too low.'
+                'Potential model degradation '
+                'detected.'
             )
 
     def monitor_request_volume(
@@ -135,7 +208,8 @@ class DriftMonitor:
         if request_count < 5:
 
             logging.warning(
-                'Very low prediction traffic detected.'
+                'Very low prediction '
+                'traffic detected.'
             )
 
     def run(self):
@@ -146,14 +220,17 @@ class DriftMonitor:
 
         df = self.fetch_recent_predictions()
 
-        self.monitor_prediction_distribution(df)
+        self.monitor_prediction_distribution(
+            df
+        )
 
         self.monitor_confidence(df)
 
         self.monitor_request_volume(df)
 
         logging.info(
-            'Drift monitoring completed successfully.'
+            'Drift monitoring completed '
+            'successfully.'
         )
 
 
@@ -162,4 +239,3 @@ if __name__ == '__main__':
     monitor = DriftMonitor()
 
     monitor.run()
- 
