@@ -110,7 +110,7 @@ def main():
 
         pipeline.fit(X_train, y_train)
 
-        logging.info('Generating predictions...')
+        logging.info('Generating predictions....')
         y_pred = pipeline.predict(X_test)
 
         metrics = evaluate_model(y_test, y_pred)
