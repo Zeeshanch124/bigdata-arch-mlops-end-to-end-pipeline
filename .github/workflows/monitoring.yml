@@ -9,6 +9,8 @@ jobs:
 
   monitoring:
     runs-on: ubuntu-latest
+    env:
+      GCP_BUCKET_NAME: ${{ vars.GCP_BUCKET_NAME }}
 
     steps:
 
