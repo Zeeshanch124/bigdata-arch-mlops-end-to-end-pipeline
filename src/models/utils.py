@@ -4,7 +4,9 @@ import os
 from data_pipeline.gcs_handler import GCSHandler
 
 
-METADATA_PATH = os.getenv('METADATA_PATH')
+METADATA_PATH = (
+    'metadata/current_model.json'
+)
 
 
 logging.basicConfig(

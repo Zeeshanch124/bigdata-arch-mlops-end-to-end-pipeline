@@ -67,7 +67,8 @@ jobs:
   deploy-staging-api:
     if: |
       github.ref == 'refs/heads/develop' &&
-      needs.changes.outputs.monitoring == 'true'
+      needs.changes.outputs.monitoring == 'true'c&&
+      needs.changes.outputs.training != 'true'
 
     needs:
       - changes
@@ -104,7 +105,8 @@ jobs:
   deploy-production-api:
     if: |
       github.ref == 'refs/heads/main' &&
-      needs.changes.outputs.monitoring == 'true'
+      needs.changes.outputs.monitoring == 'true' &&
+      needs.changes.outputs.training != 'true'
 
     needs:
       - changes

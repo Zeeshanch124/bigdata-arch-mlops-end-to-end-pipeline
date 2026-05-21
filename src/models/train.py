@@ -149,7 +149,7 @@ def main():
             'subsample': 0.8
         })
 
-        logging.info('Logging metrics to MLflow...')
+        logging.info('Logging metrics to MLflow....')
 
         mlflow.log_metrics(metrics)
 

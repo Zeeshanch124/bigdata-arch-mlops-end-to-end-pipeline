@@ -28,7 +28,7 @@ def test_valid_dataset():
 
 
 def test_invalid_credit_score():
-
+ 
     data = {
         'Age': [30],
         'Income': [50000],

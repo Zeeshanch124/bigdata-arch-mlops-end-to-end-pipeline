@@ -30,7 +30,7 @@ def main():
 
     gcs_handler = GCSHandler(BUCKET_NAME)
 
-    logging.info('Downloading raw dataset from GCS...')
+    logging.info('Downloading raw dataset from GCS....')
 
     df = gcs_handler.download_csv(RAW_DATA_PATH)
 

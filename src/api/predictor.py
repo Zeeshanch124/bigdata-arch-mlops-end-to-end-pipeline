@@ -58,7 +58,7 @@ class ModelPredictor:
 
             self.model = joblib.load(temp_file.name)
 
-        logging.info('Model loaded successfully.')
+        logging.info('Model loaded successfully..')
 
     def predict(self, features):
 
