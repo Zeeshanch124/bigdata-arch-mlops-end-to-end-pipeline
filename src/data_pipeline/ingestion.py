@@ -26,11 +26,11 @@ PROCESSED_DATA_PATH = os.getenv('PROCESSED_DATA_PATH')
 
 def main():
 
-    logging.info('Starting ingestion pipeline...')
+    logging.info('Starting ingestion pipeline....')
 
     gcs_handler = GCSHandler(BUCKET_NAME)
 
-    logging.info('Downloading raw dataset from GCS....')
+    logging.info('Downloading raw dataset from GCS.....')
 
     df = gcs_handler.download_csv(RAW_DATA_PATH)
 

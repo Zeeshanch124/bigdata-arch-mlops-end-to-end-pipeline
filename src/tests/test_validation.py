@@ -41,6 +41,6 @@ def test_invalid_credit_score():
     }
 
     df = pd.DataFrame(data)
-
+ 
     with pytest.raises(DataValidationError):
         DataValidator.validate_credit_score(df)

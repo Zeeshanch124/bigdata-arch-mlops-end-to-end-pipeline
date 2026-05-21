@@ -200,7 +200,7 @@ class DriftMonitor:
 
             logging.warning(
                 'Potential model degradation '
-                'detected..'
+                'detected...'
             )
 
             self.retraining_trigger.trigger()
