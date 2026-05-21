@@ -33,7 +33,7 @@ class RetrainingTrigger:
         headers = {
             'Accept': 'application/vnd.github+json',
             'Authorization':
-                f'Bearer {self.github_token}'
+                f'token {self.github_token}'
         }
 
         payload = {
