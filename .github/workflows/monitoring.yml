@@ -39,6 +39,14 @@ jobs:
 
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Verify GitHub Token
+        run: |
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "Token is EMPTY"
+          else
+            echo "Token exists"
+          fi
 
       - name: Run Drift Monitoring
         run: |
