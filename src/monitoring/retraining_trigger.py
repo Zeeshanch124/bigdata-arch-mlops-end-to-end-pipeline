@@ -8,7 +8,7 @@ class RetrainingTrigger:
     def __init__(self):
 
         self.github_token = os.getenv(
-            'GH_PAT'
+            'GITHUB_TOKEN'
         )
 
         self.repo = (
