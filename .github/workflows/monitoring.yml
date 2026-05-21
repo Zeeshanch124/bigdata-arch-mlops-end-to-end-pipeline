@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GCP_BUCKET_NAME: bigdata-mlop-bucket
+      # GCP_BUCKET_NAME: ${{ vars.GCP_BUCKET_NAME }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
 

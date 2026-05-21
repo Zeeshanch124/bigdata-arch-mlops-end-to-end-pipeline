@@ -1,0 +1,33 @@
+name: Retraining Pipeline
+
+on:
+
+  workflow_dispatch:
+
+jobs:
+
+  data-validation:
+    uses: ./.github/workflows/ci.yml
+
+  ingestion:
+    needs: data-validation
+    uses: ./.github/workflows/ingestion.yml
+
+    secrets: inherit
+
+  training:
+    needs: ingestion
+    uses: ./.github/workflows/training.yml
+
+    secrets: inherit
+
+  deploy-production:
+    needs: training
+    uses: ./.github/workflows/deploy.yml
+
+    with:
+      environment: production
+      manifest_path:
+        kubernetes/production/deployment.yaml
+
+    secrets: inherit

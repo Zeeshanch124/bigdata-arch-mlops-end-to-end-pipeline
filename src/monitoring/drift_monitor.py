@@ -6,6 +6,9 @@ import pandas as pd
 
 from google.cloud import bigquery
 from data_pipeline.gcs_handler import GCSHandler
+from monitoring.retraining_trigger import (
+    RetrainingTrigger
+)
 
 
 logging.basicConfig(
@@ -43,6 +46,10 @@ class DriftMonitor:
 
         self.metadata = (
             self.load_model_metadata()
+        )
+
+        self.retraining_trigger = (
+            RetrainingTrigger()
         )
 
     def load_model_metadata(self):
@@ -186,12 +193,17 @@ class DriftMonitor:
             f'{confidence_ratio:.4f}'
         )
 
-        if confidence_ratio < 0.70:
+        if (
+            confidence_ratio < 0.70
+            and len(df) > 20
+        ):
 
             logging.warning(
                 'Potential model degradation '
                 'detected.'
             )
+
+            self.retraining_trigger.trigger()
 
     def monitor_request_volume(
         self,

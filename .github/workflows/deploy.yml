@@ -1,4 +1,4 @@
-name: CI-CD-Pipeline
+name: Deployment-Pipeline
 
 on:
   workflow_call:
