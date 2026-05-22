@@ -23,7 +23,7 @@ spec:
       containers:
         - name: loan-default-api
 
-          image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:b6d8d703ae96fbe02d2cca05fe4c7c21dc8c5fb5
+          image: europe-west1-docker.pkg.dev/valid-design-385517/mlops-repo/loan-default-api:9572dc499008de5905136c9a9257cd5a212f5aae
 
           imagePullPolicy: Always
 
