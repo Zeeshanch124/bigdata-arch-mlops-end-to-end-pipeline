@@ -63,6 +63,7 @@ jobs:
     uses: ./.github/workflows/training.yml
 
     secrets: inherit
+    
 
   deploy-staging-api:
     if: |
